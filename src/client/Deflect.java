@@ -1,16 +1,20 @@
 package client;
 
-public class Deflect implements Runnable {
+public class Deflect {
+    Comm comm;
+
     public static void main(String[] args) {
         new Deflect();
     }
 
     public Deflect() {
-        new Thread(this).start();
-        new Thread(new View()).start();
-        new Thread(new Comm()).start();
+        System.err.println("starting threads");
+        comm = new Comm();
+        new Thread(comm).start();
+        new Thread(new View(this)).start();
     }
 
-    public void run() {
+    public void exit() {
+        comm.exit();
     }
 }

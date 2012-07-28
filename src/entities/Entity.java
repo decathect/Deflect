@@ -1,12 +1,14 @@
 package entities;
 
 import org.lwjgl.util.vector.Vector3f;
-import static org.lwjgl.opengl.GL11.*;
-
 import physics.Naive;
 import physics.PhysicsModel;
 
-public abstract class Entity {
+import java.io.Serializable;
+
+import static org.lwjgl.opengl.GL11.*;
+
+public abstract class Entity implements Serializable {
     protected float size;
     protected int listNum;
     protected PhysicsModel physicsModel;

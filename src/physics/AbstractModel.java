@@ -2,7 +2,9 @@ package physics;
 
 import org.lwjgl.util.vector.Vector3f;
 
-public abstract class AbstractModel implements PhysicsModel {
+import java.io.Serializable;
+
+public abstract class AbstractModel implements PhysicsModel, Serializable {
     protected Vector3f position, velocity, force, impulse;
     protected float mass;
 

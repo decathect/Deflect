@@ -3,9 +3,10 @@ package entities;
 import org.lwjgl.util.vector.Vector3f;
 import physics.PhysicsModel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class EntityManager {
+public class EntityManager implements Serializable {
     private ArrayList<Entity> entityList = new ArrayList<Entity>();
 
     public void add(Entity e) {

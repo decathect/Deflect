@@ -1,81 +1,90 @@
 package server;
 
+import simulation.Simulation;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.*;
-import java.nio.ByteBuffer;
+import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
-import java.util.Random;
 
+// TODO: incoming and outgoing as subclasses
+// TODO: figure out the right way to handle varying packet sizes
 public class Server {
-    private static final byte NUM_MOTES = 100;
-    private static final byte NUM_PLAYERS = 8;
-
-    private static Random r;
+    private static final byte MAX_PLAYERS = 8;
 
     private ArrayList<InetSocketAddress> clientList;
-    private DatagramSocket socket;
-    private DatagramPacket packet;
+    private ObjectOutputStream outputStream;
+    private ByteArrayOutputStream outputArray;
 
-    private ByteBuffer buffer;
-    private byte[] pos;
-
-    private DatagramSocket inputSocket;
-    private DatagramPacket inputPacket;
-    private byte[] inputBuffer;
+    private int seq;
+    private int players;
+    private Simulation sim;
+    private Outgoing out;
+    private Incoming in;
+    private boolean running;
+    private byte[] state;
 
     public static void main(String[] args) {
         new Server();
     }
 
     public Server() {
-        clientList = new ArrayList<InetSocketAddress>(NUM_PLAYERS);
-        inputBuffer = new byte[8192];
-        inputPacket = new DatagramPacket(inputBuffer, 8192);
-        waitForConnection();
-
-        /*
-        address = new InetSocketAddress("127.0.0.1", 5001);
-
-
-        r = new Random();
-        pos = new byte[((NUM_MOTES + NUM_PLAYERS) * 2 * 4) + (NUM_PLAYERS * 4)]; // xy coords + player rotation
-        address = new InetSocketAddress("127.0.0.1", 5000);
-        buffer = ByteBuffer.wrap(pos);
-
+        outputArray = new ByteArrayOutputStream();
         try {
-            socket = new DatagramSocket(5000);
-        } catch (SocketException e) {
+            outputStream = new ObjectOutputStream(outputArray);
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-        while(true) {
-            buffer.clear();
-            for (int i = 0; i < (pos.length) / 4; i++) {
-                buffer.putFloat(r.nextFloat());
-            }
+        running = true;
+        clientList = new ArrayList<InetSocketAddress>(MAX_PLAYERS);
+        seq = 0;
+        players = 0;
 
+        out = new Outgoing(this);
+        in = new Incoming(this);
+        sim = new Simulation(false);
+        new Thread(in).start();
+        new Thread(sim).start();
+
+        while (players < 1) {
             try {
-                packet = new DatagramPacket(pos, pos.length, address);
-                socket.send(packet);
-                System.out.println("sent.");
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        while (running) {
+            // TODO: this seems dumb just to get a byte array, find a better way
+            try {
+                outputArray.reset();
+                outputStream.reset();
+                outputStream.writeObject(sim.getState());
+                state = outputArray.toByteArray();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            for (InetSocketAddress i : clientList) {
+                out.send(i, state);
+            }
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }*/
+        }
     }
 
-    private void waitForConnection() throws IOException {
-        while (true) {
-            inputSocket.receive(inputPacket);
-
-            if (inputBuffer[0] == 1) {
-                clientList.add(new InetSocketAddress(inputPacket.getAddress(), inputPacket.getPort()));
-            }
-        }
+    public void addClient(InetSocketAddress client) {
+        if (players < MAX_PLAYERS) {
+            clientList.add(client);
+            out.send(client, 'a');
+            System.err.println("added client");
+            players++;
+        } else out.send(client, 'f');
     }
 }
