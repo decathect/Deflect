@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 public class Incoming implements Runnable {
     private static final InetSocketAddress SERVER = new InetSocketAddress("127.0.0.1", 5000);
     private static final int SERVER_PORT = 5000;
-    private static final int PACKET_SIZE = 10240;
+    private static final int PACKET_SIZE = 49152;
 
     private Server server;
     private DatagramSocket inputSocket;

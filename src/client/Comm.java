@@ -1,5 +1,8 @@
 package client;
 
+import entities.EntityManager;
+
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,32 +14,35 @@ import java.nio.ByteBuffer;
 
 public class Comm implements Runnable {
     private static final InetSocketAddress SERVER = new InetSocketAddress("127.0.0.1", 5000);
-    private static final int PACKET_SIZE = 10240;
+    private static final int PACKET_SIZE = 49152;
+    private static final byte[] CONNECTED = {'c'};
 
-    DatagramSocket sendSocket;
-    DatagramSocket receiveSocket;
-    DatagramPacket sendPacket;
-    DatagramPacket receivePacket;
-    byte[] sendArray;
-    byte[] receiveArray;
-    ByteBuffer sendBuffer;
-    ByteBuffer receiveBuffer;
+    private DatagramSocket sendSocket;
+    private DatagramSocket receiveSocket;
+    private DatagramPacket sendPacket;
+    private DatagramPacket receivePacket;
+    private byte[] sendArray;
+    private byte[] receiveArray;
+    private ByteBuffer sendBuffer;
+
+    private View view;
+    private EntityManager em;
 
     private ByteArrayInputStream inputArray;
     private ObjectInputStream inputStream;
 
     private boolean running;
 
-    public Comm() {
+    public Comm(View v) {
+        view = v;
+
         sendArray = new byte[PACKET_SIZE];
         receiveArray = new byte[PACKET_SIZE];
         sendBuffer = ByteBuffer.wrap(sendArray);
-        receiveBuffer = ByteBuffer.wrap(receiveArray);
 
         try {
             sendSocket = new DatagramSocket();
             receiveSocket = new DatagramSocket();
-            System.err.println(receiveSocket.getLocalPort());
             sendPacket = new DatagramPacket(sendArray, PACKET_SIZE);
             receivePacket = new DatagramPacket(receiveArray, PACKET_SIZE);
         } catch (SocketException e) {
@@ -47,18 +53,27 @@ public class Comm implements Runnable {
 
     public void run() {
         running = true;
-        if (!connect()) System.err.println("couldn't connect to server");
-        else System.err.println("connected to server");
+        if (!connect()) System.err.println("couldn't connect");
+        System.err.println("connected to server");
 
         while (running) {
             try {
                 receiveSocket.receive(receivePacket);
                 inputArray = new ByteArrayInputStream(receivePacket.getData());
-                inputStream = new ObjectInputStream(inputArray);
+                inputStream = new ObjectInputStream(new BufferedInputStream(inputArray));
+                try {
+                    em = (EntityManager) inputStream.readObject();
+                    view.putState(em);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        sendSocket.close();
+        receiveSocket.close();
     }
 
     private boolean connect() {
@@ -73,11 +88,12 @@ public class Comm implements Runnable {
             e.printStackTrace();
             exit();
         }
-        return (receiveBuffer.getChar() == 'a');
+        return (char) receiveArray[0] == 'c';
     }
 
     public void exit() {
         sendSocket.close();
         receiveSocket.close();
+        running = false;
     }
 }

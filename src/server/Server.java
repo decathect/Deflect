@@ -2,6 +2,7 @@ package server;
 
 import simulation.Simulation;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -32,7 +33,7 @@ public class Server {
     public Server() {
         outputArray = new ByteArrayOutputStream();
         try {
-            outputStream = new ObjectOutputStream(outputArray);
+            outputStream = new ObjectOutputStream(new BufferedOutputStream(outputArray));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,13 +45,13 @@ public class Server {
 
         out = new Outgoing(this);
         in = new Incoming(this);
-        sim = new Simulation(false);
+        sim = new Simulation();
         new Thread(in).start();
         new Thread(sim).start();
 
         while (players < 1) {
             try {
-                Thread.sleep(100);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -59,9 +60,11 @@ public class Server {
         while (running) {
             // TODO: this seems dumb just to get a byte array, find a better way
             try {
-                outputArray.reset();
-                outputStream.reset();
+                outputArray = new ByteArrayOutputStream();
+                outputStream = new ObjectOutputStream(new BufferedOutputStream(outputArray));
+
                 outputStream.writeObject(sim.getState());
+                outputStream.flush();
                 state = outputArray.toByteArray();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -72,11 +75,12 @@ public class Server {
             }
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+
     }
 
     public void addClient(InetSocketAddress client) {

@@ -70,6 +70,7 @@ public class EntityManager implements Serializable {
                     e1.addImpulse(temp);
                     temp.negate();
                     e2.addImpulse(temp);
+
                 }
             }
         }
