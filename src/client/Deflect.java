@@ -1,11 +1,8 @@
 package client;
 
-import simulation.Simulation;
-
 public class Deflect {
     Comm comm;
     View view;
-    Simulation sim;
 
     public static void main(String[] args) {
         new Deflect();
@@ -27,5 +24,11 @@ public class Deflect {
 
     public void exit() {
         comm.exit();
+        System.err.println("exiting Deflect");
+        System.exit(0);
+    }
+
+    public void send(int delta, int input[]) {
+        comm.send(delta, input);
     }
 }

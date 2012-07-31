@@ -7,18 +7,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 // TODO: incoming and outgoing as subclasses
 // TODO: figure out the right way to handle varying packet sizes
 public class Server {
     private static final byte MAX_PLAYERS = 8;
 
-    private ArrayList<InetSocketAddress> clientList;
+    //private ArrayList<InetSocketAddress> clientList;
+    private HashMap<InetSocketAddress, Integer> clientList;
     private ObjectOutputStream outputStream;
     private ByteArrayOutputStream outputArray;
 
-    private int seq;
     private int players;
     private Simulation sim;
     private Outgoing out;
@@ -39,8 +39,8 @@ public class Server {
         }
 
         running = true;
-        clientList = new ArrayList<InetSocketAddress>(MAX_PLAYERS);
-        seq = 0;
+        //clientList = new ArrayList<InetSocketAddress>(MAX_PLAYERS);
+        clientList = new HashMap<InetSocketAddress, Integer>(MAX_PLAYERS);
         players = 0;
 
         out = new Outgoing(this);
@@ -70,7 +70,7 @@ public class Server {
                 e.printStackTrace();
             }
 
-            for (InetSocketAddress i : clientList) {
+            for (InetSocketAddress i : clientList.keySet()) {
                 out.send(i, state);
             }
 
@@ -83,12 +83,23 @@ public class Server {
 
     }
 
-    public void addClient(InetSocketAddress client) {
+    public synchronized void addClient(InetSocketAddress client) {
         if (players < MAX_PLAYERS) {
-            clientList.add(client);
-            out.send(client, 'a');
-            System.err.println("added client");
+            clientList.put(client, Integer.valueOf(sim.addPlayer()));
+            out.send(client, (byte) 'c');
             players++;
-        } else out.send(client, 'f');
+            System.err.println("added client\nplayers: " + players);
+        } else out.send(client, (byte) 'f');
+    }
+
+    public synchronized void removeClient(InetSocketAddress client) {
+        clientList.remove(client);
+        players--;
+        System.err.println("removed client\nplayers: " + players);
+    }
+
+    public synchronized void updateClient(InetSocketAddress client, int delta, int up, int left, int right) {
+        //System.err.println(delta + " " + up + left + right);
+        sim.updatePlayer(clientList.get(client).intValue(), delta, up, left, right);
     }
 }

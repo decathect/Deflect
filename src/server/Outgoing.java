@@ -8,7 +8,6 @@ import java.net.SocketException;
 
 public class Outgoing {
     private static final int PACKET_SIZE = 49152;
-    private static final byte[] CONNECTED = {'c'};
 
     private DatagramSocket outputSocket;
     private DatagramPacket outputPacket;
@@ -24,8 +23,9 @@ public class Outgoing {
         outputPacket = new DatagramPacket(outputArray, PACKET_SIZE);
     }
 
-    public void send(InetSocketAddress address, char c) {
-        outputPacket = new DatagramPacket(CONNECTED, CONNECTED.length);
+    public void send(InetSocketAddress address, byte c) {
+        byte[] out = {c};
+        outputPacket = new DatagramPacket(out, out.length);
         outputPacket.setSocketAddress(address);
         try {
             outputSocket.send(outputPacket);

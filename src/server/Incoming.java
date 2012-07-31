@@ -35,21 +35,28 @@ public class Incoming implements Runnable {
         while (true) {
             inputBuffer.clear();
             try {
-                System.err.println("waiting for new client");
+                //System.err.println("waiting for new packet");
                 inputSocket.receive(inputPacket);
-                System.err.println("client connection packet received");
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             switch (inputBuffer.getChar()) {
                 case 'n':
+                    System.err.println("connection packet received");
                     server.addClient(new InetSocketAddress(inputPacket.getAddress(), inputBuffer.getInt()));
                     break;
                 case 'u':
-                    //updateState(inputBuffer);
+                    //System.err.println("update packet received");
+                    server.updateClient(new InetSocketAddress(inputPacket.getAddress(), inputBuffer.getInt()),
+                            inputBuffer.getInt(), inputBuffer.getInt(), inputBuffer.getInt(), inputBuffer.getInt());
+                    break;
+                case 'd':
+                    System.err.println("disconnection packet received");
+                    server.removeClient(new InetSocketAddress(inputPacket.getAddress(), inputBuffer.getInt()));
                     break;
                 default:
+                    System.err.println("unknown packet received");
                     break;
             }
         }

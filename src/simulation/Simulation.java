@@ -5,7 +5,7 @@ import entities.Mote;
 
 public class Simulation implements Runnable {
     // TODO: enums
-    private static final int NUM_MOTES = 100;
+    private static final int NUM_MOTES = 200;
 
     EntityManager em;
     EntityManager temp;
@@ -20,6 +20,14 @@ public class Simulation implements Runnable {
             em.add(new Mote());
         }
         delta = Timer.getDelta();
+    }
+
+    public int addPlayer() {
+        return em.addPlayer();
+    }
+
+    public void updatePlayer(int index, int delta, int up, int left, int right) {
+        em.updatePlayer(index, delta, up, left, right);
     }
 
     public void update() {
@@ -50,6 +58,10 @@ public class Simulation implements Runnable {
     public void putState(EntityManager newem) {
         temp = newem;
         dirty = true;
+    }
+
+    public int getDelta() {
+        return delta;
     }
 
     public void stop() {
