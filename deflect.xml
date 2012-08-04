@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="deflect" default="all">
+    <!-- Uncomment the following property if no tests compilation is needed -->
+    <!--
+   <property name="skip.tests" value="true"/>
+    -->
+
+    <!-- Compiler options -->
+
+    <property name="compiler.debug" value="on"/>
+    <property name="compiler.generate.no.warnings" value="off"/>
+    <property name="compiler.args" value=""/>
+    <property name="compiler.max.memory" value="128m"/>
+    <patternset id="ignored.files">
+        <exclude name="**/CVS/**"/>
+        <exclude name="**/SCCS/**"/>
+        <exclude name="**/RCS/**"/>
+        <exclude name="**/rcs/**"/>
+        <exclude name="**/.DS_Store/**"/>
+        <exclude name="**/.svn/**"/>
+        <exclude name="**/.pyc/**"/>
+        <exclude name="**/.pyo/**"/>
+        <exclude name="**/*.pyc/**"/>
+        <exclude name="**/*.pyo/**"/>
+        <exclude name="**/.git/**"/>
+        <exclude name="**/*.hprof/**"/>
+        <exclude name="**/_svn/**"/>
+        <exclude name="**/.hg/**"/>
+        <exclude name="**/*.lib/**"/>
+        <exclude name="**/*~/**"/>
+        <exclude name="**/__pycache__/**"/>
+        <exclude name="**/.bundle/**"/>
+        <exclude name="**/*.rbc/**"/>
+    </patternset>
+    <patternset id="library.patterns">
+        <include name="*.zip"/>
+        <include name="*.apk"/>
+        <include name="*.war"/>
+        <include name="*.egg"/>
+        <include name="*.ear"/>
+        <include name="*.ane"/>
+        <include name="*.swc"/>
+        <include name="*.jar"/>
+    </patternset>
+    <patternset id="compiler.resources">
+        <include name="**/?*.properties"/>
+        <include name="**/?*.xml"/>
+        <include name="**/?*.gif"/>
+        <include name="**/?*.png"/>
+        <include name="**/?*.jpeg"/>
+        <include name="**/?*.jpg"/>
+        <include name="**/?*.html"/>
+        <include name="**/?*.dtd"/>
+        <include name="**/?*.tld"/>
+        <include name="**/?*.ftl"/>
+    </patternset>
+
+
+    <!-- Project Libraries -->
+
+    <path id="library.lwjgl.classpath">
+        <pathelement location="${basedir}/lib/lwjgl.jar"/>
+        <pathelement location="${basedir}/lib/lwjgl_util.jar"/>
+    </path>
+
+
+    <!-- Modules -->
+
+
+    <!-- Module Deflect -->
+
+    <dirname property="module.deflect.basedir" file="${ant.file}"/>
+
+
+    <property name="compiler.args.deflect" value="${compiler.args}"/>
+
+    <property name="deflect.output.dir" value="${module.deflect.basedir}/out/production/Deflect"/>
+    <property name="deflect.testoutput.dir" value="${module.deflect.basedir}/out/test/Deflect"/>
+
+    <path id="deflect.module.bootclasspath">
+        <!-- Paths to be included in compilation bootclasspath -->
+    </path>
+
+    <path id="deflect.module.production.classpath">
+        <path refid="library.lwjgl.classpath"/>
+    </path>
+
+    <path id="deflect.runtime.production.module.classpath">
+        <pathelement location="${deflect.output.dir}"/>
+        <path refid="library.lwjgl.classpath"/>
+    </path>
+
+    <path id="deflect.module.classpath">
+        <pathelement location="${deflect.output.dir}"/>
+        <path refid="library.lwjgl.classpath"/>
+    </path>
+
+    <path id="deflect.runtime.module.classpath">
+        <pathelement location="${deflect.testoutput.dir}"/>
+        <pathelement location="${deflect.output.dir}"/>
+        <path refid="library.lwjgl.classpath"/>
+    </path>
+
+
+    <patternset id="excluded.from.module.deflect">
+        <patternset refid="ignored.files"/>
+    </patternset>
+
+    <patternset id="excluded.from.compilation.deflect">
+        <patternset refid="excluded.from.module.deflect"/>
+    </patternset>
+
+    <path id="deflect.module.sourcepath">
+        <dirset dir="${module.deflect.basedir}">
+            <include name="src"/>
+        </dirset>
+    </path>
+
+
+    <target name="compile.module.deflect" depends="compile.module.deflect.production,compile.module.deflect.tests"
+            description="Compile module Deflect"/>
+
+    <target name="compile.module.deflect.production" description="Compile module Deflect; production classes">
+        <mkdir dir="${deflect.output.dir}"/>
+        <javac destdir="${deflect.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+               memorymaximumsize="${compiler.max.memory}" fork="true">
+            <compilerarg line="${compiler.args.deflect}"/>
+            <bootclasspath refid="deflect.module.bootclasspath"/>
+            <classpath refid="deflect.module.production.classpath"/>
+            <src refid="deflect.module.sourcepath"/>
+            <patternset refid="excluded.from.compilation.deflect"/>
+        </javac>
+
+        <copy todir="${deflect.output.dir}">
+            <fileset dir="${module.deflect.basedir}/src">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile.module.deflect.tests" depends="compile.module.deflect.production"
+            description="compile module Deflect; test classes" unless="skip.tests"/>
+
+    <target name="clean.module.deflect" description="cleanup module">
+        <delete dir="${deflect.output.dir}"/>
+        <delete dir="${deflect.testoutput.dir}"/>
+    </target>
+
+    <target name="init" description="Build initialization">
+        <!-- Perform any build initialization in this target -->
+    </target>
+
+    <target name="clean" depends="clean.module.deflect" description="cleanup all"/>
+
+    <target name="build.modules" depends="init, clean, compile.module.deflect" description="build all modules"/>
+
+    <target name="init.artifacts">
+        <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+        <property name="artifact.output.deflect:jar" value="${basedir}/out/artifacts/Deflect_jar"/>
+        <mkdir dir="${artifacts.temp.dir}"/>
+        <property name="temp.jar.path.Deflect.jar" value="${artifacts.temp.dir}/Deflect.jar"/>
+    </target>
+
+    <target name="artifact.deflect:jar" depends="init.artifacts, compile.module.deflect"
+            description="Build &#39;Deflect:jar&#39; artifact">
+        <property name="artifact.temp.output.deflect:jar" value="${artifacts.temp.dir}/Deflect_jar"/>
+        <mkdir dir="${artifact.temp.output.deflect:jar}"/>
+        <jar destfile="${temp.jar.path.Deflect.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+            <zipfileset file="${basedir}/src/META-INF/MANIFEST.MF" prefix="META-INF"/>
+            <zipfileset dir="${deflect.output.dir}"/>
+            <zipfileset src="${basedir}/lib/lwjgl.jar"/>
+            <zipfileset src="${basedir}/lib/lwjgl_util.jar"/>
+        </jar>
+        <copy file="${temp.jar.path.Deflect.jar}" tofile="${artifact.temp.output.deflect:jar}/Deflect.jar"/>
+    </target>
+
+    <target name="build.all.artifacts" depends="artifact.deflect:jar" description="Build all artifacts">
+        <mkdir dir="${artifact.output.deflect:jar}"/>
+        <copy todir="${artifact.output.deflect:jar}">
+            <fileset dir="${artifact.temp.output.deflect:jar}"/>
+        </copy>
+        <copy todir="${artifact.output.deflect:jar}">
+            <fileset dir="${basedir}/extra"/>
+        </copy>
+
+        <!-- Delete temporary files -->
+        <delete dir="${artifacts.temp.dir}"/>
+    </target>
+
+    <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+</project>

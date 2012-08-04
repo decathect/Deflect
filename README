@@ -1,0 +1,3 @@
+Simple physics simulation now with multiplayer over local networks
+
+Needs lwjgl.jar and lwjgl_util.jar in lib/ and native dlls (lwjgl.dll/liblwjgl.so/etc) in extra/

@@ -10,8 +10,6 @@ public class Player extends Entity {
     Vector3f initialDirection;
     Vector3f direction;
     int rotation;
-    float impact;
-    int shieldNum;
 
     public Player() {
         initialDirection = new Vector3f(1, 0, 0);
@@ -51,7 +49,7 @@ public class Player extends Entity {
         GL11.glEndList();
     }
 
-    public void updatePlayer(int delta, int up, int left, int right) {
+    public void updatePlayer(int up, int left, int right) {
         if (up > 0) {
             Vector3f t = new Vector3f(direction);
             t.scale(enginePower * up);

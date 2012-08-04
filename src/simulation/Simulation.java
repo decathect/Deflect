@@ -12,7 +12,6 @@ public class Simulation implements Runnable {
     int delta;
     boolean dirty;
     boolean running;
-    boolean render;
 
     public Simulation() {
         em = new EntityManager();
@@ -26,12 +25,12 @@ public class Simulation implements Runnable {
         return em.addPlayer();
     }
 
-    public void updatePlayer(int index, int delta, int up, int left, int right) {
-        em.updatePlayer(index, delta, up, left, right);
+    public void updatePlayer(int index, int up, int left, int right) {
+        em.updatePlayer(index, up, left, right);
     }
 
     public void update() {
-        if (dirty == true) {
+        if (dirty) {
             em = temp;
             dirty = false;
         }
@@ -62,9 +61,5 @@ public class Simulation implements Runnable {
 
     public int getDelta() {
         return delta;
-    }
-
-    public void stop() {
-        running = false;
     }
 }

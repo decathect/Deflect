@@ -1,34 +1,34 @@
 package client;
 
+import network.Client;
+
 public class Deflect {
-    Comm comm;
+    Client net;
     View view;
+    static String serverAddress;
 
     public static void main(String[] args) {
+        serverAddress = args[0];
         new Deflect();
     }
 
     public Deflect() {
         System.err.println("starting threads");
         view = new View(this);
-        comm = new Comm(view);
+        net = new Client(view, serverAddress);
 
+        net.connect();
         new Thread(view).start();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        new Thread(comm).start();
+        new Thread(net).start();
     }
 
     public void exit() {
-        comm.exit();
+        net.exit();
         System.err.println("exiting Deflect");
         System.exit(0);
     }
 
-    public void send(int delta, int input[]) {
-        comm.send(delta, input);
+    public void send(int[] input) {
+        net.sendUpdate(input);
     }
 }

@@ -1,0 +1,1 @@
+java -cp Deflect.jar client.Deflect 127.0.0.1

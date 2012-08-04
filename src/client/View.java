@@ -15,7 +15,6 @@ public class View implements Runnable {
     private static final int DISPLAY_HEIGHT = 768;
 
     private int[] input = {0, 0, 0};
-    ;
     private int tempDelta;
 
     Deflect main;
@@ -41,7 +40,7 @@ public class View implements Runnable {
         glOrtho(0, 1000, 0, DISPLAY_HEIGHT * 1000 / DISPLAY_WIDTH, 1, -1);
         glMatrixMode(GL_MODELVIEW);
 
-        System.err.println("View initialized");
+        System.err.println("view initialized");
 
         sim = new Simulation();
         makeLists();
@@ -60,7 +59,7 @@ public class View implements Runnable {
     }
 
     public void putState(EntityManager em) {
-        main.send(sim.getDelta(), input);
+        main.send(input);
         input[0] = 0;
         input[1] = 0;
         input[2] = 0;

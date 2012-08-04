@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public class EntityManager implements Serializable {
     private ArrayList<Entity> entityList = new ArrayList<Entity>();
 
-
     public synchronized void add(Entity e) {
         entityList.add(e);
     }
@@ -20,9 +19,9 @@ public class EntityManager implements Serializable {
         return entityList.indexOf(p);
     }
 
-    public void updatePlayer(int index, int delta, int up, int left, int right) {
+    public void updatePlayer(int index, int up, int left, int right) {
         Player p = (Player) entityList.get(index);
-        p.updatePlayer(delta, up, left, right);
+        p.updatePlayer(up, left, right);
     }
 
     public void update(int delta) {
