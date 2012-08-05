@@ -9,8 +9,6 @@ public class Mote extends Entity {
 
     public Mote() {
         // TODO: extract these here arbitrary numbers
-        physicsModel.setPosition(new Vector3f(r.nextInt(1000), r.nextInt(1000), 0));
-
         int intSize = r.nextInt(10) + 1;
         size = intSize;
         color = new Vector3f(1, 1, 1);
@@ -18,5 +16,10 @@ public class Mote extends Entity {
 
         // TODO: scale instead of individual lists
         list = intSize;
+    }
+
+    public Mote(Vector3f p) {
+        this();
+        physicsModel.setPosition(p);
     }
 }
