@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
 
 public class ClientSock extends Network {
     private Deflect deflect;
@@ -19,11 +20,14 @@ public class ClientSock extends Network {
 
     private InetSocketAddress server;
 
+    private ByteBuffer signalBuffer;
+
     public ClientSock(Deflect v, String a) {
         deflect = v;
         server = new InetSocketAddress(a, SERVER_PORT);
 
         byteInput = new ByteArrayInputStream(stateArray);
+        signalBuffer = ByteBuffer.allocate(4 * 4);
 
         try {
             socket = new DatagramSocket();
