@@ -1,4 +1,4 @@
-package physics;
+package simulation.physics;
 
 import org.lwjgl.util.vector.Vector3f;
 

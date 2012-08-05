@@ -1,7 +1,7 @@
 package simulation;
 
-import entities.EntityManager;
-import entities.Mote;
+import simulation.entities.EntityManager;
+import simulation.entities.Mote;
 
 public class Simulation implements Runnable {
     // TODO: enums
@@ -18,7 +18,7 @@ public class Simulation implements Runnable {
         for (int i = 0; i < NUM_MOTES; i++) {
             em.add(new Mote());
         }
-        delta = Timer.getDelta();
+        delta = Util.getDelta();
     }
 
     public int addPlayer() {
@@ -34,7 +34,7 @@ public class Simulation implements Runnable {
             em = temp;
             dirty = false;
         }
-        delta = Timer.getDelta();
+        delta = Util.getDelta();
         em.update(delta);
     }
 

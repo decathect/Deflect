@@ -1,11 +1,24 @@
-package entities;
+package simulation;
+
+import org.lwjgl.Sys;
+import org.lwjgl.util.vector.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
-import org.lwjgl.util.vector.Vector3f;
 
 public class Util {
     private static final float g = .0001f; // gravitational constant
     private static final float e = .8f; // coefficient of restitution
+
+    private static long now, then = 0;
+    private static int delta;
+
+    public static int getDelta() {
+        now = Sys.getTime() * 1000 / Sys.getTimerResolution();
+        delta = (int) (now - then);
+        then = now;
+
+        return delta;
+    }
 
     // calculates force of gravity
     public static float gravity(float mass1, float mass2, float rSquared) {

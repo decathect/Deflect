@@ -1,7 +1,7 @@
 package network;
 
-import client.View;
-import entities.EntityManager;
+import client.Deflect;
+import simulation.entities.EntityManager;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -12,15 +12,15 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 
 public class ClientSock extends Network {
-    private View view;
+    private Deflect deflect;
 
     private ByteArrayInputStream byteInput;
     private ObjectInputStream objInput;
 
     private InetSocketAddress server;
 
-    public ClientSock(View v, String a) {
-        view = v;
+    public ClientSock(Deflect v, String a) {
+        deflect = v;
         server = new InetSocketAddress(a, SERVER_PORT);
 
         byteInput = new ByteArrayInputStream(stateArray);
@@ -65,7 +65,7 @@ public class ClientSock extends Network {
             switch (objInput.read()) {
                 case UPDATE:
                     state = (EntityManager) objInput.readObject();
-                    view.putState(state);
+                    deflect.putState(state);
                     break;
                 case SERVER_SHUTDOWN:
                     System.err.println("server shutting down");

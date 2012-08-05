@@ -1,7 +1,8 @@
-package entities;
+package simulation.entities;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
+import simulation.Util;
 
 public class Player extends Entity {
     float enginePower = .01f;

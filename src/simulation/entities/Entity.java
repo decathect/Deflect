@@ -1,8 +1,8 @@
-package entities;
+package simulation.entities;
 
 import org.lwjgl.util.vector.Vector3f;
-import physics.Naive;
-import physics.PhysicsModel;
+import simulation.physics.Naive;
+import simulation.physics.PhysicsModel;
 
 import java.io.Serializable;
 

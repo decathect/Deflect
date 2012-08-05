@@ -1,6 +1,6 @@
 package network;
 
-import entities.EntityManager;
+import simulation.entities.EntityManager;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -47,6 +47,7 @@ public abstract class Network implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        socket.close();
     }
 
     abstract void process();
@@ -78,6 +79,5 @@ public abstract class Network implements Runnable {
 
     public void exit() {
         running = false;
-        socket.close();
     }
 }
