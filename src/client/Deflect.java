@@ -15,7 +15,7 @@ public class Deflect implements Runnable {
     private static final int DISPLAY_WIDTH = 1440;
     private static final int DISPLAY_HEIGHT = 900;
 
-    private int[] input = {0, 0, 0};
+    private int[] input = {0, 0};
     private int tempDelta;
 
     static String serverAddress;
@@ -93,7 +93,6 @@ public class Deflect implements Runnable {
         send(input);
         input[0] = 0;
         input[1] = 0;
-        input[2] = 0;
         sim.putState(em);
     }
 
@@ -136,7 +135,7 @@ public class Deflect implements Runnable {
         if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
             input[1] += tempDelta;
         } else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-            input[2] += tempDelta;
+            input[1] -= tempDelta;
         }
     }
 }

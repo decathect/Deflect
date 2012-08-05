@@ -29,7 +29,7 @@ public class ServerSock extends Network {
             case UPDATE:
                 //System.err.println("update packet received");
                 server.updateClient((InetSocketAddress) statePacket.getSocketAddress(),
-                        stateBuffer.getInt(), stateBuffer.getInt(), stateBuffer.getInt());
+                        stateBuffer.getInt(), stateBuffer.getInt());
                 break;
             case DISCONNECT:
                 System.err.println("disconnection packet received");

@@ -18,49 +18,18 @@ public class Player extends Entity {
         physicsModel.setMass(100);
         size = 10;
 
-        //initModel();
         listNum = 20;
     }
 
-    private void initModel() {
-        listNum = GL11.glGenLists(2);
-        GL11.glNewList(listNum + 1, GL11.GL_COMPILE);
-        GL11.glBegin(GL11.GL_QUADS);
-        GL11.glVertex3f(-8, 4, 0);
-        GL11.glVertex3f(-24, -12, 0);
-        GL11.glVertex3f(-24, -16, 0);
-        GL11.glVertex3f(-8, -16, 0);
-        GL11.glEnd();
-        GL11.glEndList();
-        GL11.glNewList(listNum, GL11.GL_COMPILE);
-        GL11.glRotatef(-90, 0, 0, 1);
-        GL11.glScalef(.5f, .5f, 1);
-        GL11.glBegin(GL11.GL_POLYGON);
-        GL11.glVertex3f(-8, 4, 0);
-        GL11.glVertex3f(0, 24, 0);
-        GL11.glVertex3f(8, 4, 0);
-        GL11.glVertex3f(8, -16, 0);
-        GL11.glVertex3f(5, -19, 0);
-        GL11.glVertex3f(-5, -19, 0);
-        GL11.glVertex3f(-8, -16, 0);
-        GL11.glEnd();
-        GL11.glCallList(listNum + 1);
-        GL11.glScalef(-1, 1, 1);
-        GL11.glCallList(listNum + 1);
-        GL11.glEndList();
-    }
-
-    public void updatePlayer(int up, int left, int right) {
-        if (up > 0) {
+    public void updatePlayer(int forward, int turn) {
+        if (forward > 0) {
             Vector3f t = new Vector3f(direction);
-            t.scale(enginePower * up);
+            t.scale(enginePower * forward);
             physicsModel.addForce(t);
         }
 
-        int temp = left - right;
-
-        if (temp != 0) {
-            rotation += rotationSpeed * temp;
+        if (turn != 0) {
+            rotation += rotationSpeed * turn;
         }
 
         direction = Util.toVector(rotation);

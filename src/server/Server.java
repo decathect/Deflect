@@ -97,7 +97,7 @@ public class Server {
         System.err.println("removed client " + client + "\nplayers: " + players);
     }
 
-    public synchronized void updateClient(InetSocketAddress client, int up, int left, int right) {
-        sim.updatePlayer(clientList.get(client), up, left, right);
+    public synchronized void updateClient(InetSocketAddress client, int forward, int turn) {
+        sim.updatePlayer(clientList.get(client), forward, turn);
     }
 }

@@ -20,9 +20,9 @@ public class EntityManager implements Serializable {
         return entityList.indexOf(p);
     }
 
-    public void updatePlayer(int index, int up, int left, int right) {
+    public void updatePlayer(int index, int forward, int turn) {
         Player p = (Player) entityList.get(index);
-        p.updatePlayer(up, left, right);
+        p.updatePlayer(forward, turn);
     }
 
     public void update(int delta) {

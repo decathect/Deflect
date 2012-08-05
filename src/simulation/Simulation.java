@@ -25,8 +25,8 @@ public class Simulation implements Runnable {
         return em.addPlayer();
     }
 
-    public void updatePlayer(int index, int up, int left, int right) {
-        em.updatePlayer(index, up, left, right);
+    public void updatePlayer(int index, int forward, int turn) {
+        em.updatePlayer(index, forward, turn);
     }
 
     public void update() {
