@@ -58,10 +58,10 @@ public class Deflect implements Runnable {
 
         System.err.println("view initialized");
 
-        sim = new Simulation();
         Render.makeLists();
+        sim = new Simulation();
+        new Thread(net).start();
 
-        startNetwork();
         while (!Display.isCloseRequested()) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             Display.sync(60);
@@ -72,10 +72,6 @@ public class Deflect implements Runnable {
         }
         Display.destroy();
         exit();
-    }
-
-    public void startNetwork() {
-        new Thread(net).start();
     }
 
     public void exit() {
