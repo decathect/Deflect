@@ -1,9 +1,9 @@
 package client;
 
-import network.Client;
+import network.ClientSock;
 
 public class Deflect {
-    Client net;
+    ClientSock net;
     View view;
     static String serverAddress;
 
@@ -15,9 +15,15 @@ public class Deflect {
     public Deflect() {
         System.err.println("starting threads");
         view = new View(this);
-        net = new Client(view, serverAddress);
+        net = new ClientSock(view, serverAddress);
 
-        net.connect();
+        while (!net.connect()) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         new Thread(view).start();
         new Thread(net).start();
     }

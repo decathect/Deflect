@@ -1,5 +1,6 @@
 package server;
 
+import network.Network;
 import network.ServerSock;
 import simulation.Simulation;
 
@@ -11,10 +12,6 @@ import java.net.InetSocketAddress;
 import java.util.HashMap;
 
 public class Server {
-    private static final char CONNECT = 'c';
-    private static final char UPDATE = 'u';
-    private static final char SERVER_FULL = 'f';
-    private static final char SERVER_SHUTDOWN = 's';
     private static final byte MAX_PLAYERS = 8;
 
     private HashMap<InetSocketAddress, Integer> clientList;
@@ -64,7 +61,7 @@ public class Server {
                 outputArray.reset();
                 outputStream = new ObjectOutputStream(outputArray);
 
-                outputStream.writeChar('u');
+                outputStream.writeByte(Network.UPDATE);
                 outputStream.writeObject(sim.getState());
                 outputStream.flush();
                 state = outputArray.toByteArray();
@@ -78,7 +75,7 @@ public class Server {
             }
 
             try {
-                Thread.sleep(100);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -88,10 +85,10 @@ public class Server {
     public synchronized void addClient(InetSocketAddress client) {
         if (players < MAX_PLAYERS) {
             clientList.put(client, sim.addPlayer());
-            net.send(client, CONNECT);
+            net.send(client, Network.CONNECT);
             players++;
             System.err.println("added client " + client + "\nplayers: " + players);
-        } else net.send(client, SERVER_FULL);
+        } else net.send(client, Network.SERVER_FULL);
     }
 
     public synchronized void removeClient(InetSocketAddress client) {

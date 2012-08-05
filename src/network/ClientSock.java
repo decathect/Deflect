@@ -3,6 +3,7 @@ package network;
 import client.View;
 import entities.EntityManager;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -10,7 +11,7 @@ import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 
-public class Client extends Network {
+public class ClientSock extends Network {
     private View view;
 
     private ByteArrayInputStream byteInput;
@@ -18,7 +19,7 @@ public class Client extends Network {
 
     private InetSocketAddress server;
 
-    public Client(View v, String a) {
+    public ClientSock(View v, String a) {
         view = v;
         server = new InetSocketAddress(a, SERVER_PORT);
 
@@ -31,15 +32,14 @@ public class Client extends Network {
         }
     }
 
-    public void connect() {
+    public boolean connect() {
         send(server, CONNECT);
         receive();
 
-        stateBuffer.clear();
-        switch (stateBuffer.getChar()) {
+        switch (stateArray[0]) {
             case CONNECT:
                 System.err.println("connection successful");
-                break;
+                return true;
             case SERVER_FULL:
                 System.err.println("server full");
                 break;
@@ -47,11 +47,12 @@ public class Client extends Network {
                 System.err.println("unknown packet received");
                 break;
         }
+        return false;
     }
 
     public void sendUpdate(int[] input) {
         signalBuffer.clear();
-        signalBuffer.putChar('u');
+        signalBuffer.put(UPDATE);
         for (int i : input) signalBuffer.putInt(i);
         send(server, signalBuffer.array());
     }
@@ -60,8 +61,8 @@ public class Client extends Network {
         byteInput.reset();
 
         try {
-            objInput = new ObjectInputStream(byteInput);
-            switch (objInput.readChar()) {
+            objInput = new ObjectInputStream(new BufferedInputStream(byteInput));
+            switch (objInput.read()) {
                 case UPDATE:
                     state = (EntityManager) objInput.readObject();
                     view.putState(state);

@@ -21,7 +21,7 @@ public class ServerSock extends Network {
 
     void process() {
         stateBuffer.clear();
-        switch (stateBuffer.getChar()) {
+        switch (stateBuffer.get()) {
             case CONNECT:
                 System.err.println("connection packet received");
                 server.addClient((InetSocketAddress) statePacket.getSocketAddress());
