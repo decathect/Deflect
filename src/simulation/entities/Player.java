@@ -21,6 +21,10 @@ public class Player extends Entity {
         list = l;
     }
 
+    public void setColor(Vector3f c) {
+        color = c;
+    }
+
     public void updatePlayer(int forward, int turn) {
         if (forward > 0) {
             Vector3f t = new Vector3f(direction);

@@ -28,7 +28,7 @@ public class Simulation implements Runnable {
     }
 
     public int addPlayer() {
-        return em.addPlayer();
+        return em.addPlayer(new Vector3f(r.nextFloat(), r.nextFloat(), r.nextFloat()));
     }
 
     public void updatePlayer(int index, int forward, int turn) {

@@ -15,8 +15,9 @@ public class EntityManager implements Serializable {
         entityList.add(e);
     }
 
-    public synchronized int addPlayer() {
+    public synchronized int addPlayer(Vector3f color) {
         Player p = new Player(Render.PLAYER_LIST);
+        p.setColor(color);
         entityList.add(p);
         return entityList.indexOf(p);
     }
