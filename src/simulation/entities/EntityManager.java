@@ -1,5 +1,6 @@
 package simulation.entities;
 
+import client.Render;
 import org.lwjgl.util.vector.Vector3f;
 import simulation.Util;
 import simulation.physics.PhysicsModel;
@@ -15,7 +16,7 @@ public class EntityManager implements Serializable {
     }
 
     public synchronized int addPlayer() {
-        Player p = new Player();
+        Player p = new Player(Render.PLAYER_LIST);
         entityList.add(p);
         return entityList.indexOf(p);
     }

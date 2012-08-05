@@ -2,24 +2,22 @@ package simulation.entities;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import java.util.Random;
-
 public class Mote extends Entity {
-    private static Random r = new Random();
-
-    public Mote() {
-        // TODO: extract these here arbitrary numbers
-        int intSize = r.nextInt(10) + 1;
-        size = intSize;
+    public Mote(int l) {
+        size = 1;
+        list = l;
         color = new Vector3f(1, 1, 1);
         physicsModel.setMass(size * size);
-
-        // TODO: scale instead of individual lists
-        list = intSize;
     }
 
-    public Mote(Vector3f p) {
-        this();
+    public Mote(int list, Vector3f p, int size) {
+        this(list);
         physicsModel.setPosition(p);
+        setSize(size);
+    }
+
+    public void setSize(int s) {
+        size = s;
+        physicsModel.setMass(size * size);
     }
 }

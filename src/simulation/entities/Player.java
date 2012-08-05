@@ -12,14 +12,13 @@ public class Player extends Entity {
     Vector3f direction;
     int rotation;
 
-    public Player() {
+    public Player(int l) {
         color = new Vector3f(.5f, .5f, 1);
         initialDirection = new Vector3f(1, 0, 0);
         direction = new Vector3f(initialDirection);
         physicsModel.setMass(100);
         size = 10;
-
-        list = 20;
+        list = l;
     }
 
     public void updatePlayer(int forward, int turn) {
@@ -37,6 +36,6 @@ public class Player extends Entity {
     }
 
     public void render() {
-        Render.render(physicsModel.getPosition(), rotation, color, list);
+        Render.render(physicsModel.getPosition(), 1, rotation, color, list);
     }
 }

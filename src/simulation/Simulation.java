@@ -1,5 +1,6 @@
 package simulation;
 
+import client.Render;
 import org.lwjgl.util.vector.Vector3f;
 import simulation.entities.EntityManager;
 import simulation.entities.Mote;
@@ -21,7 +22,7 @@ public class Simulation implements Runnable {
     public Simulation() {
         em = new EntityManager();
         for (int i = 0; i < NUM_MOTES; i++) {
-            em.add(new Mote(new Vector3f(r.nextInt(1000), r.nextInt(1000), 0)));
+            em.add(new Mote(Render.MOTE_LIST, new Vector3f(r.nextInt(1000), r.nextInt(1000), 0), r.nextInt(8)));
         }
         delta = Util.getDelta();
     }

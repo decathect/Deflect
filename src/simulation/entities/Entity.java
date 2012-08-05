@@ -30,6 +30,6 @@ public abstract class Entity implements Serializable {
     }
 
     public void render() {
-        Render.render(physicsModel.getPosition(), 0, color, list);
+        Render.render(physicsModel.getPosition(), size, 0, color, list);
     }
 }
