@@ -6,7 +6,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import simulation.Simulation;
-import simulation.Util;
 import simulation.entities.EntityManager;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -60,7 +59,7 @@ public class Deflect implements Runnable {
         System.err.println("view initialized");
 
         sim = new Simulation();
-        makeLists();
+        Render.makeLists();
 
         startNetwork();
         while (!Display.isCloseRequested()) {
@@ -94,36 +93,6 @@ public class Deflect implements Runnable {
         input[0] = 0;
         input[1] = 0;
         sim.putState(em);
-    }
-
-    public void makeLists() {
-        for (int i = 1; i < 6; i++)
-            Util.makeCircle(i, 10, i);
-
-        glNewList(21, GL_COMPILE);
-        glBegin(GL_QUADS);
-        glVertex3f(-8, 4, 0);
-        glVertex3f(-24, -12, 0);
-        glVertex3f(-24, -16, 0);
-        glVertex3f(-8, -16, 0);
-        glEnd();
-        glEndList();
-        glNewList(20, GL_COMPILE);
-        glRotatef(-90, 0, 0, 1);
-        glScalef(.5f, .5f, 1);
-        glBegin(GL_POLYGON);
-        glVertex3f(-8, 4, 0);
-        glVertex3f(0, 24, 0);
-        glVertex3f(8, 4, 0);
-        glVertex3f(8, -16, 0);
-        glVertex3f(5, -19, 0);
-        glVertex3f(-5, -19, 0);
-        glVertex3f(-8, -16, 0);
-        glEnd();
-        glCallList(21);
-        glScalef(-1, 1, 1);
-        glCallList(21);
-        glEndList();
     }
 
     private void getInput() {

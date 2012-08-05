@@ -11,11 +11,12 @@ public class Mote extends Entity {
         // TODO: extract these here arbitrary numbers
         physicsModel.setPosition(new Vector3f(r.nextInt(1000), r.nextInt(1000), 0));
 
-        int intSize = r.nextInt(5) + 1;
+        int intSize = r.nextInt(10) + 1;
         size = intSize;
+        color = new Vector3f(1, 1, 1);
         physicsModel.setMass(size * size);
 
         // TODO: scale instead of individual lists
-        listNum = intSize;
+        list = intSize;
     }
 }

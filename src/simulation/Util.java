@@ -3,8 +3,6 @@ package simulation;
 import org.lwjgl.Sys;
 import org.lwjgl.util.vector.Vector3f;
 
-import static org.lwjgl.opengl.GL11.*;
-
 public class Util {
     private static final float g = .0001f; // gravitational constant
     private static final float e = .8f; // coefficient of restitution
@@ -41,20 +39,5 @@ public class Util {
         v.setY((float) Math.sin(r));
 
         return v;
-    }
-
-    public static void makeCircle(int id, int detail, float size) {
-        glNewList(id, GL_COMPILE);
-        double degree;
-        glPushMatrix();
-        glScalef(size, size, 1);
-        glBegin(GL_TRIANGLE_FAN);
-        for (int i = 0; i < detail; i++) {
-            degree = (i / (float) detail) * (Math.PI * 2);
-            glVertex3f((float) Math.cos(degree), (float) Math.sin(degree), 0);
-        }
-        glEnd();
-        glPopMatrix();
-        glEndList();
     }
 }

@@ -1,16 +1,16 @@
 package simulation.entities;
 
+import client.Render;
 import org.lwjgl.util.vector.Vector3f;
 import simulation.physics.Naive;
 import simulation.physics.PhysicsModel;
 
 import java.io.Serializable;
 
-import static org.lwjgl.opengl.GL11.*;
-
 public abstract class Entity implements Serializable {
+    protected Vector3f color;
     protected float size;
-    protected int listNum;
+    protected int list;
     protected PhysicsModel physicsModel;
 
     public Entity() {
@@ -30,10 +30,6 @@ public abstract class Entity implements Serializable {
     }
 
     public void render() {
-        Vector3f p = physicsModel.getPosition();
-        glPushMatrix();
-        glTranslatef(p.x, p.y, p.z);
-        glCallList(listNum);
-        glPopMatrix();
+        Render.render(physicsModel.getPosition(), 0, color, list);
     }
 }
