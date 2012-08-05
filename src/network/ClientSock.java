@@ -10,24 +10,19 @@ import java.io.ObjectInputStream;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
-import java.nio.ByteBuffer;
 
 public class ClientSock extends Network {
     private Deflect deflect;
 
     private ByteArrayInputStream byteInput;
     private ObjectInputStream objInput;
-
     private InetSocketAddress server;
-
-    private ByteBuffer signalBuffer;
 
     public ClientSock(Deflect v, String a) {
         deflect = v;
         server = new InetSocketAddress(a, SERVER_PORT);
 
         byteInput = new ByteArrayInputStream(stateArray);
-        signalBuffer = ByteBuffer.allocate(4 * 4);
 
         try {
             socket = new DatagramSocket();
@@ -36,14 +31,15 @@ public class ClientSock extends Network {
         }
     }
 
-    public boolean connect() {
+    public int connect() {
         send(server, CONNECT);
         receive();
 
-        switch (stateArray[0]) {
+        stateBuffer.clear();
+        switch (stateBuffer.get()) {
             case CONNECT:
                 System.err.println("connection successful");
-                return true;
+                return stateBuffer.getInt();
             case SERVER_FULL:
                 System.err.println("server full");
                 break;
@@ -51,7 +47,7 @@ public class ClientSock extends Network {
                 System.err.println("unknown packet received");
                 break;
         }
-        return false;
+        return 0;
     }
 
     public void sendUpdate(int[] input) {

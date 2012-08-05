@@ -25,6 +25,7 @@ public class Server {
     private boolean running;
     private int players;
     private byte[] state;
+    private int index;
 
     public static void main(String[] args) {
         new Server();
@@ -75,7 +76,7 @@ public class Server {
             }
 
             try {
-                Thread.sleep(50);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -84,8 +85,9 @@ public class Server {
 
     public synchronized void addClient(InetSocketAddress client) {
         if (players < MAX_PLAYERS) {
-            clientList.put(client, sim.addPlayer());
-            net.send(client, Network.CONNECT);
+            index = sim.addPlayer();
+            clientList.put(client, index);
+            net.send(client, Network.CONNECT, index);
             players++;
             System.err.println("added client " + client + "\nplayers: " + players);
         } else net.send(client, Network.SERVER_FULL);

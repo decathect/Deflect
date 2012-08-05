@@ -22,8 +22,10 @@ public class EntityManager implements Serializable {
     }
 
     public void updatePlayer(int index, int forward, int turn) {
-        Player p = (Player) entityList.get(index);
-        p.updatePlayer(forward, turn);
+        if (entityList.size() > index) {
+            Player p = (Player) entityList.get(index);
+            p.updatePlayer(forward, turn);
+        }
     }
 
     public void update(int delta) {

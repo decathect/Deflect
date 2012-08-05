@@ -15,6 +15,7 @@ public class Deflect implements Runnable {
     private static final int DISPLAY_HEIGHT = 900;
 
     private int[] input = {0, 0};
+    private int index;
     private int tempDelta;
 
     static String serverAddress;
@@ -31,13 +32,14 @@ public class Deflect implements Runnable {
         System.err.println("starting threads");
         net = new ClientSock(this, serverAddress);
 
-        while (!net.connect()) {
+        while ((index = net.connect()) == 0) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+
         new Thread(this).start();
     }
 
@@ -92,6 +94,7 @@ public class Deflect implements Runnable {
     }
 
     private void getInput() {
+        int turn = 0;
         tempDelta = sim.getDelta();
         if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
             input[0] += tempDelta;
@@ -99,8 +102,12 @@ public class Deflect implements Runnable {
 
         if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
             input[1] += tempDelta;
+            turn += tempDelta;
         } else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
             input[1] -= tempDelta;
+            turn -= tempDelta;
         }
+
+        sim.updatePlayer(index, 0, turn);
     }
 }

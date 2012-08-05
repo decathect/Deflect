@@ -24,7 +24,7 @@ public abstract class Network implements Runnable {
     DatagramPacket statePacket;
     byte[] stateArray;
     ByteBuffer stateBuffer;
-
+    ByteBuffer signalBuffer;
 
     private boolean running;
 
@@ -32,6 +32,7 @@ public abstract class Network implements Runnable {
         stateArray = new byte[MAX_PACKET_SIZE];
         statePacket = new DatagramPacket(stateArray, stateArray.length);
         stateBuffer = ByteBuffer.wrap(stateArray);
+        signalBuffer = ByteBuffer.allocate(4 * 4);
     }
 
     public void run() {
@@ -73,6 +74,13 @@ public abstract class Network implements Runnable {
 
     public void send(InetSocketAddress address, byte c) {
         send(address, new byte[]{c});
+    }
+
+    public void send(InetSocketAddress address, byte c, int i) {
+        signalBuffer.clear();
+        signalBuffer.put(c);
+        signalBuffer.putInt(i);
+        send(address, signalBuffer.array());
     }
 
     public void exit() {
