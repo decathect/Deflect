@@ -32,7 +32,7 @@ public class Render {
 
     public static void makeLists() {
         for (int i = 1; i < 11; i++)
-            makeCircle(i, 10, i);
+            makeCircle(i, 12, i);
 
         glNewList(21, GL_COMPILE);
         glBegin(GL_QUADS);
@@ -44,7 +44,7 @@ public class Render {
         glEndList();
         glNewList(20, GL_COMPILE);
         glRotatef(-90, 0, 0, 1);
-        glScalef(.5f, .5f, 1);
+        glScalef(.25f, .5f, 1);
         glBegin(GL_POLYGON);
         glVertex3f(-8, 4, 0);
         glVertex3f(0, 24, 0);
