@@ -11,8 +11,8 @@ import simulation.entities.EntityManager;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Deflect implements Runnable {
-    private static final int DISPLAY_WIDTH = 1440;
-    private static final int DISPLAY_HEIGHT = 900;
+    public static final int DISPLAY_WIDTH = 1440;
+    public static final int DISPLAY_HEIGHT = 900;
 
     private int[] input = {0, 0};
     private int index;
@@ -67,8 +67,8 @@ public class Deflect implements Runnable {
         while (!Display.isCloseRequested()) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             Display.sync(60);
-            sim.update();
             getInput();
+            sim.update();
             sim.render();
             Display.update();
         }

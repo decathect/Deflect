@@ -1,5 +1,6 @@
 package simulation;
 
+import client.Deflect;
 import client.Render;
 import org.lwjgl.util.vector.Vector3f;
 import simulation.entities.EntityManager;
@@ -22,7 +23,7 @@ public class Simulation implements Runnable {
     public Simulation() {
         em = new EntityManager();
         for (int i = 0; i < NUM_MOTES; i++) {
-            em.add(new Mote(Render.MOTE_LIST, new Vector3f(r.nextInt(1000), r.nextInt(1000), 0), r.nextInt(8)));
+            em.add(new Mote(Render.MOTE_LIST, new Vector3f(r.nextInt(1000), r.nextInt(Deflect.DISPLAY_HEIGHT * 1000 / Deflect.DISPLAY_WIDTH), 0), r.nextInt(6)));
         }
         delta = Util.getDelta();
     }
@@ -60,8 +61,8 @@ public class Simulation implements Runnable {
         return em;
     }
 
-    public void putState(EntityManager newem) {
-        temp = newem;
+    public void putState(EntityManager em) {
+        temp = em;
         dirty = true;
     }
 

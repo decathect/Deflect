@@ -29,6 +29,10 @@ public abstract class Entity implements Serializable {
         return size;
     }
 
+    public void setColor(Vector3f c) {
+        color = c;
+    }
+
     public void render() {
         Render.render(physicsModel.getPosition(), size, 0, color, list);
     }

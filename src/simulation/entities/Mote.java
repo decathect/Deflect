@@ -2,22 +2,42 @@ package simulation.entities;
 
 import org.lwjgl.util.vector.Vector3f;
 
+/**
+ * Motes are inert physics entities.
+ */
 public class Mote extends Entity {
-    public Mote(int l) {
+    /**
+     * Constructs Mote entity with the given display list.
+     *
+     * @param list number of display list
+     */
+    public Mote(int list) {
         size = 1;
-        list = l;
+        this.list = list;
         color = new Vector3f(1, 1, 1);
         physicsModel.setMass(size * size);
     }
 
-    public Mote(int list, Vector3f p, int size) {
+    /**
+     * Constructs Mote entity with the given display list, position, and size.
+     *
+     * @param list     number of display list
+     * @param position initial position of Mote
+     * @param size     initial size of Mote
+     */
+    public Mote(int list, Vector3f position, int size) {
         this(list);
-        physicsModel.setPosition(p);
+        physicsModel.setPosition(position);
         setSize(size);
     }
 
-    public void setSize(int s) {
-        size = s;
+    /**
+     * Changes the size of a Mote and sets its mass proportionally.
+     *
+     * @param size new size of Mote
+     */
+    public void setSize(int size) {
+        this.size = size;
         physicsModel.setMass(size * size);
     }
 }
