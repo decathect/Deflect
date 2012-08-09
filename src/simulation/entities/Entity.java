@@ -7,9 +7,21 @@ import simulation.physics.PhysicsModel;
 
 import java.io.Serializable;
 
+/**
+ * Entities are generic physics objects.
+ */
 public abstract class Entity implements Serializable {
+    /**
+     * Color of the entity
+     */
     protected Vector3f color;
+    /**
+     * Size of the entity and radius of circular collision area
+     */
     protected float size;
+    /**
+     * Display list for the entity
+     */
     protected int list;
     protected PhysicsModel physicsModel;
 

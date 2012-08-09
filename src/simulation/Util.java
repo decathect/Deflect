@@ -18,7 +18,14 @@ public class Util {
         return delta;
     }
 
-    // calculates force of gravity
+    /**
+     * Calculates the force of gravity.
+     *
+     * @param mass1    mass of first object
+     * @param mass2    mass of second object
+     * @param rSquared distance between objects squared
+     * @return force of gravity
+     */
     public static float gravity(float mass1, float mass2, float rSquared) {
         if (rSquared > 0)
             return g * mass1 * mass2 / rSquared;
@@ -26,8 +33,15 @@ public class Util {
             return 0;
     }
 
-    // calculates impulse
-    // from http://chrishecker.com/images/e/e7/Gdmphys3.pdf
+    /**
+     * Calculates impulse.
+     * (from http://chrishecker.com/images/e/e7/Gdmphys3.pdf)
+     *
+     * @param mass1            mass of first object
+     * @param mass2            mass of second object
+     * @param relativeVelocity relative velocity of the objects
+     * @return impulse from collision
+     */
     public static float impulse(float mass1, float mass2, float relativeVelocity) {
         return (-(1 + e) * relativeVelocity) / (1 / mass1 + 1 / mass2);
     }
